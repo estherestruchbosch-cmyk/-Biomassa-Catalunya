@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Biomassa Catalunya</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+
+<body>
+<header>
+
+    <div class="capcalera">
+
+        <div class="logo">
+            🌿
+        </div>
+
+        <div class="titolApp">
+            Transició energètica i impacte climàtic
+        </div>
+
+    </div>
+
+    <nav>
+
+        <button id="navInici">🏠 Inici</button>
+
+        <button id="navBiomasses">🌿 Biomasses</button>
+
+        <button id="navMapa">🗺️ Mapa interactiu</button>
+
+        <button id="navAjuda">ℹ️ Ajuda</button>
+
+    </nav>
+
+</header>
+
+<!-- PORTADA -->
+
+<section id="portada">
+
+<h1>Transició energètica i impacte climàtic</h1>
+
+<h2>Distribució territorial dels recursos energètics i reptes associats</h2>
+
+<button id="comenca">COMENÇA</button>
+
+</section>
+
+<!-- MENU BIOMASSA -->
+
+<section id="menu">
+
+<h1>Quines fonts de biomassa existeixen a Catalunya?</h1>
+
+<div class="icones">
+
+<div class="icona" data-biomassa="forestal">🌲<br>Forestal</div>
+
+<div class="icona" data-biomassa="agricola">🌾<br>Agrícola</div>
+
+<div class="icona" data-biomassa="ramadera">🐖<br>Ramadera</div>
+
+<div class="icona" data-biomassa="aquatica">🌊<br>Aquàtica</div>
+
+<div class="icona" data-biomassa="industrial">🏭<br>Industrial</div>
+
+<div class="icona" data-biomassa="urbana">🏙️<br>Urbana</div>
+
+</div>
+
+<div id="fletxa">
+
+➡️
+
+</div>
+
+</section>
+<!-- PANTALLA RAMADERA -->
+
+<section id="ramadera">
+
+
+<h1 id="titolBiomassa"></h1>
+
+<div class="pantalla">
+
+    <div class="menuLateral">
+
+        <button class="opcio" data-seccio="quees">📖 Què és?</button>
+
+        <button class="opcio" data-seccio="distribucio">🗺 Distribució</button>
+
+        <button class="opcio" data-seccio="reptes">⚠️ Reptes</button>
+
+        <button class="opcio" data-seccio="energia">⚡ Energia</button>
+
+    </div>
+
+    <div id="contingut">
+
+    Selecciona una opció del menú.
+
+    </div>
+
+</div>
+
+<button id="tornarMenu">← Tornar</button>
+
+</section>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="js/dades.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/script.js"></script>
+</body>
+
+</html>
