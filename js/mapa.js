@@ -28,7 +28,7 @@ function crearMapa() {
 
 function carregarComarques(){
 
-    fetch("data/comarques.geojson")
+    fetch("data/Comarques.geojson")
 
     .then(resposta => resposta.json())
 
