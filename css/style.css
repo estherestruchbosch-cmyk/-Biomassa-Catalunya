@@ -366,4 +366,22 @@ border:2px solid #2e7d32;
     border-radius:12px;
     padding:20px;
     box-shadow:0 4px 12px rgba(0,0,0,.15);
+}.taulaPotencial{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+.taulaPotencial td{
+    padding:8px;
+    border-bottom:1px solid #ddd;
+}
+
+.taulaPotencial td:last-child{
+    text-align:right;
+    font-weight:bold;
+}
+
+.taulaPotencial tr:hover{
+    background:#f2f2f2;
 }
