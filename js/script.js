@@ -95,10 +95,10 @@ document.querySelectorAll(".opcio").forEach(function(boto){
     crearMapa();
 
     break;
-            case "reptes":
+            case "oportunitats i reptes":
 
                 contingut.innerHTML = `
-                    <h2>⚠️ Reptes</h2>
+                    <h2>⚠️ Oportunitats i reptes</h2>
                     <p>${dades.reptes}</p>
                 `;
                 break;
