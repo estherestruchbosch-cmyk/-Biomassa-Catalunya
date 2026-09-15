@@ -5,11 +5,9 @@ const biomasses = {
         nom: "Biomassa forestal",
         tipus: "Biomassa seca",
 
-        quees: `Aquesta biomassa seca prové de la gestió directa dels boscos, principalment en forma de llenya i de restes forestals procedents de les operacions silvícoles.<br><br>
+        quees: `Aquesta biomassa prové de la gestió directa dels boscos, principalment en forma de llenya i de restes forestals procedents de les operacions silvícoles.<br><br>
         
-        Per a aquest estudi i a causa de la disponibilitat de dades, només es comptabilitza la biomassa forestal procedent de la producció de llenya. La fusta de major qualitat no s’inclou, ja que generalment es destina a la construcció, a la indústria del tauler o a la producció d’embalatges, productes amb un major valor afegit i una vida útil més llarga, que permeten mantenir el carboni emmagatzemat durant períodes més prolongats.<br><br>
-        
-        D’aquesta manera, l’estimació se centra en la fracció de la producció forestal destinada principalment a usos energètics, evitant comptabilitzar com a biomassa energètica aquella fusta que pot tenir usos materials de major valor i contribuir a l’emmagatzematge de carboni a llarg termini.`,
+        Per a aquest estudi, a causa de la disponibilitat de dades, només es comptabilitza la biomassa forestal procedent de la producció de llenya. La fusta de major qualitat no s’inclou, ja que generalment es destina a la construcció, a la indústria del tauler o a la producció d’embalatges, productes amb un major valor afegit i una vida útil més llarga, que permeten mantenir el carboni emmagatzemat durant períodes més prolongats.<br><br>
 
         distribucio: `Predomina a les comarques gironines, especialment la Selva, la Garrotxa i l'Alt Empordà, així com a Osona, el Vallès Oriental i les comarques del Pirineu i del Prepirineu amb una elevada superfície forestal, com el Ripollès, el Berguedà, la Noguera i l'Alt Urgell.`,
 
