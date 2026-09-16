@@ -110,7 +110,7 @@ const configuracioBiomassa = {
                 camp: "urbana_poda",
 
                 // MWh / tona
-                pci: 4.2
+                pci: 3.9
             },
 
             form: {

@@ -135,7 +135,7 @@ const biomasses = {
 
         quees: `Inclou principalment la fracció orgànica dels residus municipals (FORM) i les restes vegetals procedents de la poda i la jardineria urbana.`,
 
-        distribucio: `La seva generació està vinculada a la densitat de població i al metabolisme urbà. Es concentra principalment a l'Àrea Metropolitana de Barcelona, el Vallès Occidental, el Baix Llobregat, el Barcelonès, el Maresme i el Tarragonès.`,
+        distribucio: `La seva generació està vinculada a la densitat de població i al metabolisme urbà. Es concentra principalment a l'Àrea Metropolitana de Barcelona, el Vallès Occidental, el Vallès Oriental, el Baix Llobregat, el Barcelonès, el Maresme i el Tarragonès. Destaca especialment la comarca de l'Anoia.`,
 
         reptes: `La concentració d'aquest tipus de biomassa en els nuclis urbans facilita la seva recollida i valorització i contribueix al foment de l'economia circular.<br><br>
 
