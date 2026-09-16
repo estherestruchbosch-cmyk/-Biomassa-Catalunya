@@ -133,51 +133,7 @@ document.querySelectorAll(".opcio").forEach(function (boto) {
                 biomassaActual
             );
 
-<<<<<<< Updated upstream
-            case "distribucio":
-
-    contingut.innerHTML = `
-    <h2>🗺 Distribució territorial</h2>
-
-    <p>${dades.distribucio}</p>
-
-    <div id="visor">
-
-        <div id="mapa"></div>
-
-        <div id="infoComarca">
-
-            <h2>📍 Selecciona una comarca</h3>
-
-            <p>Fes clic sobre una comarca del mapa.</p>
-
-        </div>
-
-    </div>
-`;
-
-    crearMapa();
-
-    break;
-            case "oportunitats i reptes":
-
-                contingut.innerHTML = `
-                    <h2>⚠️ Oportunitats i reptes</h2>
-                    <p>${dades.reptes}</p>
-                `;
-                break;
-
-            case "energia":
-
-                contingut.innerHTML = `
-                    <h2>⚡ Valor energètic</h2>
-                    <p>${dades.energia}</p>
-                `;
-                break;
-=======
             return;
->>>>>>> Stashed changes
-
         }
 
 
