@@ -1,75 +1,139 @@
+// =====================================================
+// ELEMENTS PRINCIPALS
+// =====================================================
+
 const portada = document.getElementById("portada");
 const menu = document.getElementById("menu");
 const ramadera = document.getElementById("ramadera");
+const pantallaInformacio = document.getElementById("pantallaInformacio");
+
 const titolBiomassa = document.getElementById("titolBiomassa");
 const contingut = document.getElementById("contingut");
+
 let biomassaActual = "";
 
-document.getElementById("comenca").onclick = function () {
+
+// =====================================================
+// BOTÓ COMENÇA
+// =====================================================
+
+document.getElementById("comenca").addEventListener("click", function () {
 
     portada.style.display = "none";
+    pantallaInformacio.style.display = "none";
+    ramadera.style.display = "none";
+
     menu.style.display = "flex";
 
-};
-
-// Obrir pantalla Ramadera
+});
 
 
 
-document.querySelectorAll(".icona").forEach(function(icona){
+// =====================================================
+// SELECCIONAR UNA BIOMASSA
+// =====================================================
 
-    icona.onclick = function(){
+document.querySelectorAll(".icona[data-biomassa]").forEach(function (icona) {
+
+    icona.addEventListener("click", function () {
 
         const tipus = this.dataset.biomassa;
+
         biomassaActual = tipus;
 
+        console.log("Biomassa seleccionada:", tipus);
+
+
+        // ---------------------------------------------
+        // COMPROVAR QUE EXISTEIXEN LES DADES
+        // ---------------------------------------------
+
+        if (!biomasses || !biomasses[tipus]) {
+
+            console.error(
+                "No existeixen dades per a:",
+                tipus
+            );
+
+            return;
+        }
+
+
         const dades = biomasses[tipus];
+
+
+        // ---------------------------------------------
+        // TÍTOL
+        // ---------------------------------------------
 
         titolBiomassa.innerHTML =
             dades.icona + " " + dades.nom;
 
-        contingut.innerHTML =
-        `
-        <h2>Què és?</h2>
 
-        <p>${dades.quees}</p>
+        // ---------------------------------------------
+        // CONTINGUT INICIAL
+        // ---------------------------------------------
+
+        contingut.innerHTML = `
+
+            <h2>📖 Què és?</h2>
+
+            <p>
+                ${dades.quees}
+            </p>
+
         `;
+
+
+        // ---------------------------------------------
+        // CANVI DE PANTALLA
+        // ---------------------------------------------
 
         menu.style.display = "none";
 
+        pantallaInformacio.style.display = "none";
+
         ramadera.style.display = "flex";
 
-    }
+    });
 
 });
 
-// Tornar al menú
 
-document.getElementById("tornarMenu").onclick = function () {
+// =====================================================
+// TORNAR AL MENÚ DES DE BIOMASSA
+// =====================================================
+
+document.getElementById("tornarMenu").addEventListener("click", function () {
 
     ramadera.style.display = "none";
+
     menu.style.display = "flex";
 
-};
+});
 
-document.querySelectorAll(".opcio").forEach(function(boto){
 
-    boto.onclick = function(){
+// =====================================================
+// BOTONS LATERALS
+// =====================================================
+
+document.querySelectorAll(".opcio").forEach(function (boto) {
+
+    boto.addEventListener("click", function () {
 
         const seccio = this.dataset.seccio;
 
         const dades = biomasses[biomassaActual];
 
-        switch(seccio){
 
-            case "quees":
+        if (!dades) {
 
-                contingut.innerHTML = `
-                    <h2>📖 Què és?</h2>
-                    <p>${dades.quees}</p>
-                `;
-                break;
+            console.error(
+                "No hi ha dades per:",
+                biomassaActual
+            );
 
+<<<<<<< Updated upstream
             case "distribucio":
 
     contingut.innerHTML = `
@@ -110,9 +174,126 @@ document.querySelectorAll(".opcio").forEach(function(boto){
                     <p>${dades.energia}</p>
                 `;
                 break;
+=======
+            return;
+>>>>>>> Stashed changes
 
         }
 
-    };
+
+        // =================================================
+        // QUÈ ÉS?
+        // =================================================
+
+        if (seccio === "quees") {
+
+            contingut.innerHTML = `
+
+                <h2>
+                    📖 Què és?
+                </h2>
+
+                <p>
+                    ${dades.quees}
+                </p>
+
+            `;
+
+        }
+
+
+        // =================================================
+        // DISTRIBUCIÓ
+        // =================================================
+
+        else if (seccio === "distribucio") {
+
+            contingut.innerHTML = `
+
+                <h2>
+                    🗺 Distribució territorial
+                </h2>
+
+                <p>
+                    ${dades.distribucio}
+                </p>
+
+                <div id="visor">
+
+                    <div id="mapa"></div>
+
+                    <div id="infoComarca">
+
+                        <h2>
+                            📍 Selecciona una comarca
+                        </h2>
+
+                        <p>
+                            Fes clic sobre una comarca
+                            del mapa.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            // ---------------------------------------------
+            // IMPORTANT:
+            // actualitzem el tipus de biomassa del mapa
+            // ---------------------------------------------
+
+            seleccionarBiomassa(biomassaActual);
+
+            // Crear el mapa després d'haver creat #mapa
+            crearMapa();
+
+        }
+
+
+        // =================================================
+        // OPORTUNITATS I REPTES
+        // =================================================
+
+        else if (seccio === "oportunitats i reptes") {
+
+            contingut.innerHTML = `
+
+                <h2>
+                    ⚠️ Oportunitats i reptes
+                </h2>
+
+                <p>
+                    ${dades.reptes}
+                </p>
+
+            `;
+
+        }
+
+
+        // =================================================
+        // ENERGIA
+        // =================================================
+
+        else if (seccio === "energia") {
+
+            contingut.innerHTML = `
+
+                <h2>
+                    ⚡ Valor energètic
+                </h2>
+
+                <p>
+                    ${dades.energia}
+                </p>
+
+            `;
+
+        }
+
+    });
 
 });
