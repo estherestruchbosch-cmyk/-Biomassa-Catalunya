@@ -18,25 +18,45 @@ const configuracioBiomassa = {
     forestal: {
         nom: "biomassa forestal",
         camp: "Forestal",
-        pci: 4.2
+
+        // MWh/t (referència ICAEN per a l'estella forestal, veure dades.js)
+        pci: 3.8
     },
 
     ramadera: {
         nom: "biomassa ramadera",
         camp: "Ramadera",
-        pci: 1.0
+
+        // Biomassa humida: es valoritza via digestió
+        // anaeròbia (metà), no amb un PCI directe en
+        // tones. El CSV no distingeix entre porcí, boví
+        // i aviram, així que s'assumeix majoritàriament
+        // porcí (bestiar dominant a les comarques amb
+        // més valors: Segrià, Noguera, Pla d'Urgell) i
+        // es fa servir el punt mitjà del seu rang.
+
+        // Nm³ CH4 / tona (punt mitjà del rang porcí 2-15, Flotats 2018)
+        ch4: 8.5,
+
+        // kWh / Nm³ CH4
+        pciCH4: 9.97
     },
 
     agricola: {
         nom: "biomassa agrícola",
         camp: "Agricola",
-        pci: 4.0
+
+        // MWh/t (mateixa referència que la forestal, veure dades.js)
+        pci: 3.8
     },
 
     aquatica: {
         nom: "biomassa aquàtica",
-        camp: "Aquatica",
-        pci: 2.0
+        camp: "Aquatica"
+
+        // Sense PCI: segons dades.js, no es disposa d'un valor de
+        // referència prou robust i aquesta categoria no s'inclou en
+        // l'estimació quantitativa del potencial energètic del visor.
     },
 
 
@@ -172,6 +192,18 @@ function carregarComarques() {
             );
 
 
+            // ==================================
+            // RANG DE VALORS DE LA BIOMASSA
+            // ACTUALMENT SELECCIONADA
+            // ==================================
+            // Es calcula UN COP abans de pintar
+            // totes les comarques, perquè totes
+            // facin servir el mateix mínim i màxim
+            // de referència.
+
+            const { min, max } = obtenirRangActual();
+
+
             capaComarques = L.geoJSON(
 
                 dades,
@@ -212,7 +244,7 @@ function carregarComarques() {
                             weight: 1,
 
                             fillColor:
-                                obtenirColor(valor),
+                                obtenirColor(valor, min, max),
 
                             fillOpacity: 0.8
                         };
@@ -297,10 +329,63 @@ function carregarComarques() {
 
 
 // ========================================
+// OBTENIR EL RANG (MIN/MAX) DE VALORS DE
+// LA BIOMASSA ACTUALMENT SELECCIONADA
+// ========================================
+//
+// Recorre totes les comarques i calcula el
+// valor mínim i màxim (per sobre de 0) per al
+// tipus de biomassa seleccionat en aquell
+// moment (biomassaSeleccionada). Això permet
+// que els colors del mapa es calculin de
+// manera RELATIVA a cada tipus de biomassa,
+// i no amb una escala fixa igual per a totes.
+
+function obtenirRangActual() {
+
+    let min = Infinity;
+    let max = -Infinity;
+
+    for (const nom in potencial) {
+
+        const valor = obtenirValorMapa(nom);
+
+        if (valor > 0) {
+
+            if (valor < min) {
+                min = valor;
+            }
+
+            if (valor > max) {
+                max = valor;
+            }
+        }
+    }
+
+    if (min === Infinity) {
+        min = 0;
+    }
+
+    if (max === -Infinity) {
+        max = 0;
+    }
+
+    return { min, max };
+}
+
+
+// ========================================
 // OBTENIR COLOR SEGONS EL VALOR
 // ========================================
+//
+// Ara el color es calcula de manera RELATIVA
+// al mínim i màxim del tipus de biomassa
+// seleccionat (min i max els calcula
+// obtenirRangActual()). Com més a prop del
+// màxim, més fosc/verd intens; com més a
+// prop del mínim, més clar.
 
-function obtenirColor(valor) {
+function obtenirColor(valor, min, max) {
 
     if (valor === undefined || valor === null) {
         return "#f5f5f5";
@@ -316,54 +401,47 @@ function obtenirColor(valor) {
 
 
     // ----------------------------------------
-    // ESCALA DE COLORS
+    // ESCALA DE COLORS (de més clar a més fosc)
     // ----------------------------------------
 
-    // Valor molt baix
-    if (valor <= 10) {
-        return "#e8f5e9";
-    }
+    const colors = [
+        "#e8f5e9",
+        "#c8e6c9",
+        "#a5d6a7",
+        "#81c784",
+        "#66bb6a",
+        "#43a047",
+        "#2e7d32",
+        "#1b5e20"
+    ];
 
 
-    // Valor baix
-    if (valor <= 50) {
-        return "#c8e6c9";
-    }
+    // Si tots els valors són iguals (no hi ha
+    // rang), es fa servir un verd mitjà per a
+    // totes les comarques amb dades.
 
-
-    // Valor mitjà-baix
-    if (valor <= 100) {
-        return "#a5d6a7";
-    }
-
-
-    // Valor mitjà
-    if (valor <= 250) {
-        return "#81c784";
-    }
-
-
-    // Valor mitjà-alt
-    if (valor <= 500) {
+    if (max === min) {
         return "#66bb6a";
     }
 
 
-    // Valor alt
-    if (valor <= 1000) {
-        return "#43a047";
+    // ----------------------------------------
+    // POSICIÓ RELATIVA DEL VALOR DINS EL RANG
+    // ----------------------------------------
+
+    const ratio = (valor - min) / (max - min);
+
+    let index = Math.floor(ratio * colors.length);
+
+    if (index >= colors.length) {
+        index = colors.length - 1;
     }
 
-
-    // Valor molt alt
-    if (valor <= 2500) {
-        return "#2e7d32";
+    if (index < 0) {
+        index = 0;
     }
 
-
-    // Valor extremadament alt
-
-    return "#1b5e20";
+    return colors[index];
 }
 
 
@@ -404,7 +482,7 @@ async function carregarPotencial() {
 
         const textNet =
             text
-                .replace(/^\uFEFF/, "")
+                .replace(/^﻿/, "")
                 .replace(/\r/g, "")
                 .trim();
 
@@ -770,6 +848,17 @@ function actualitzarMapa() {
     }
 
 
+    // ==================================
+    // RANG DE VALORS DE LA BIOMASSA
+    // ACTUALMENT SELECCIONADA
+    // ==================================
+    // Es recalcula cada vegada que es
+    // canvia de biomassa, perquè cada
+    // tipus té la seva pròpia escala.
+
+    const { min, max } = obtenirRangActual();
+
+
     capaComarques.setStyle(
 
         function(feature) {
@@ -797,7 +886,7 @@ function actualitzarMapa() {
                 weight: 1,
 
                 fillColor:
-                    obtenirColor(valor),
+                    obtenirColor(valor, min, max),
 
                 fillOpacity: 0.8
             };
@@ -896,6 +985,50 @@ function mostrarComarca(nom) {
 
 
     // ========================================
+    // BIOMASSA AQUÀTICA
+    // ========================================
+    // No es calcula potencial energètic: no hi
+    // ha un valor de referència prou robust
+    // (veure dades.js, camp "energia").
+
+    if (
+        biomassaSeleccionada === "aquatica"
+    ) {
+
+        const tonesAquatica =
+            dades.Aquatica || 0;
+
+        info.innerHTML = `
+
+            <h2>📍 ${nom}</h2>
+
+            <hr>
+
+            <p>
+                Aquesta comarca disposa de
+                <strong>
+                    ${tonesAquatica.toLocaleString("ca-ES")}
+                    tones anuals
+                </strong>
+                de biomassa aquàtica.
+            </p>
+
+            <p>
+                Actualment no es disposa d'un valor
+                de referència prou robust per estimar
+                el potencial energètic d'aquest recurs,
+                per la qual cosa no s'inclou en
+                l'estimació quantitativa del potencial
+                energètic del visor.
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    // ========================================
     // RESTA DE BIOMASSES
     // ========================================
 
@@ -909,23 +1042,36 @@ function mostrarComarca(nom) {
         dades[config.camp] || 0;
 
 
-    const pci =
-        config.pci;
+    // ----------------------------------------
+    // CALCULAR ENERGIA
+    // ----------------------------------------
+    // Biomassa seca (forestal, agrícola): PCI
+    // directe en MWh/t.
+    // Biomassa humida (ramadera): es converteix
+    // primer a metà (Nm3 CH4/t) i després a
+    // energia (kWh/Nm3 CH4).
 
+    let energia = 0;
 
-    const energia =
-        tones * pci;
+    if (config.pci !== undefined) {
+
+        energia =
+            tones * config.pci;
+
+    }
+    else if (config.ch4 !== undefined) {
+
+        energia =
+            tones *
+            config.ch4 *
+            config.pciCH4 /
+            1000;
+    }
 
 
     console.log(
         "TONES:",
         tones
-    );
-
-
-    console.log(
-        "PCI:",
-        pci
     );
 
 
